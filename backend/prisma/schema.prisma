@@ -1,0 +1,74 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+model Tenant {
+  id            String         @id @default(uuid())
+  name          String
+  email         String         @unique
+  createdAt     DateTime       @default(now())
+  users         User[]
+  leads         Lead[]
+  conversations Conversation[]
+  appointments  Appointment[]
+}
+
+model User {
+  id       String @id @default(uuid())
+  email    String @unique
+  password String
+  role     String @default("admin")
+  tenantId String
+  tenant   Tenant @relation(fields: [tenantId], references: [id])
+}
+
+model Lead {
+  id           String        @id @default(uuid())
+  name         String
+  phone        String
+  source       String        @default("facebook")
+  status       String        @default("new")
+  tenantId     String
+  tenant       Tenant        @relation(fields: [tenantId], references: [id])
+  createdAt    DateTime      @default(now())
+  conversation Conversation?
+  appointment  Appointment?
+}
+
+model Conversation {
+  id        String    @id @default(uuid())
+  leadId    String    @unique
+  lead      Lead      @relation(fields: [leadId], references: [id])
+  tenantId  String
+  tenant    Tenant    @relation(fields: [tenantId], references: [id])
+  status    String    @default("active")
+  createdAt DateTime  @default(now())
+  messages  Message[]
+}
+
+model Message {
+  id             String       @id @default(uuid())
+  conversationId String
+  conversation   Conversation @relation(fields: [conversationId], references: [id])
+  role           String       // "user" | "assistant"
+  content        String
+  createdAt      DateTime     @default(now())
+}
+
+model Appointment {
+  id              String   @id @default(uuid())
+  leadId          String   @unique
+  lead            Lead     @relation(fields: [leadId], references: [id])
+  tenantId        String
+  tenant          Tenant   @relation(fields: [tenantId], references: [id])
+  scheduledAt     DateTime
+  googleEventId   String?
+  status          String   @default("scheduled")
+  createdAt       DateTime @default(now())
+}
