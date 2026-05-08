@@ -7,6 +7,22 @@ const rateLimit = require('express-rate-limit');
 const { PrismaClient } = require('@prisma/client');
 
 const prisma = new PrismaClient();
+const twilio = require('twilio');
+const twilioClient = twilio(process.env.TWILIO_ACCOUNT_SID, process.env.TWILIO_AUTH_TOKEN);
+
+async function sendWhatsAppMessage(phone, name) {
+  try {
+    await twilioClient.messages.create({
+      from: process.env.TWILIO_WHATSAPP_FROM,
+      to: `whatsapp:+212${phone.replace(/^0/, '')}`,
+      body: `Bonjour ${name} ! 👋\n\nJe suis l'assistant IA de LeadFlow. Nous avons reçu votre demande et nous sommes ravis de vous aider.\n\nComment puis-je vous aider aujourd'hui ?`
+    });
+    console.log('✅ WhatsApp message sent to:', phone);
+  } catch (error) {
+    console.error('❌ WhatsApp error:', error.message);
+  }
+}
+
 const app = express();
 
 app.use(express.json());
@@ -51,6 +67,7 @@ app.post('/api/webhook/facebook', async (req, res) => {
           }
         });
         console.log('✅ Lead cree:', name, phone);
+        await sendWhatsAppMessage(phone, name);
       }
     }
     return res.sendStatus(200);
