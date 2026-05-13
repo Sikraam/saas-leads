@@ -77,6 +77,13 @@ app.post('/api/webhook/facebook', async (req, res) => {
   }
 });
 
+// WHATSAPP WEBHOOK - AI replies
+app.post('/api/webhook/whatsapp', require('express').urlencoded({ extended: false }), async (req, res) => {
+  const { handleWhatsAppReply } = require('./controllers/aiController');
+  return handleWhatsAppReply(req, res);
+});
+
+
 const authLimiter = rateLimit({ windowMs: 15 * 60 * 1000, max: 10 });
 const generalLimiter = rateLimit({ windowMs: 15 * 60 * 1000, max: 100 });
 
