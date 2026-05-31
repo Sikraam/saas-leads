@@ -1,4 +1,4 @@
-process.loadEnvFile('.env');
+//process.loadEnvFile('.env');
 
 const express = require('express');
 const cors = require('cors');
