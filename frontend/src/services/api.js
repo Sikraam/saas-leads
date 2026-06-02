@@ -1,11 +1,10 @@
-// API URL: https://saas-leads-production.up.railway.app/api
+// API URL: production Railway
 import axios from 'axios';
 
 const API = axios.create({
-  baseURL: 'https://saas-leads-production.up.railway.app/api'
+  baseURL: process.env.REACT_APP_API_URL || 'https://saas-leads-production.up.railway.app/api'
 });
 
-// زيد token تلقائياً فكل request
 API.interceptors.request.use((config) => {
   const token = localStorage.getItem('token');
   if (token) {
