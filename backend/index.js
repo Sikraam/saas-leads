@@ -28,7 +28,12 @@ const app = express();
 app.use(express.json());
 app.use(helmet());
 app.use(cors({
-  origin: ['http://localhost:3000', 'https://saas-leads-avf7r70yj-ikraam-s-projects1.vercel.app'],
+  origin: [
+    'http://localhost:3000', 
+    'https://saas-leads-amber.vercel.app',
+    'https://saas-leads-avf7r70yj-ikraam-s-projects1.vercel.app',
+    'https://saas-leads-git-main-ikraam-s-projects1.vercel.app'
+  ],
   credentials: true
 }));
 
