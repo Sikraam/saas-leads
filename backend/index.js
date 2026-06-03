@@ -37,7 +37,6 @@ app.use(cors({
   credentials: true
 }));
 
-app.use('/api/calendar', generalLimiter, require('./routes/calendarRoutes'));
 // WEBHOOK GET - Verification
 app.get('/api/webhook/facebook', (req, res) => {
   const mode = req.query['hub.mode'];
@@ -62,7 +61,6 @@ app.post('/api/webhook/facebook', async (req, res) => {
         const leadData = change.value;
         const name = leadData.field_data?.find(f => f.name === 'full_name')?.values[0] || 'Inconnu';
         const phone = leadData.field_data?.find(f => f.name === 'phone_number')?.values[0] || '';
-
         await prisma.lead.create({
           data: {
             name,
@@ -88,7 +86,6 @@ app.post('/api/webhook/whatsapp', require('express').urlencoded({ extended: fals
   const { handleWhatsAppReply } = require('./controllers/aiController');
   return handleWhatsAppReply(req, res);
 });
-
 
 const authLimiter = rateLimit({ windowMs: 15 * 60 * 1000, max: 10 });
 const generalLimiter = rateLimit({ windowMs: 15 * 60 * 1000, max: 100 });
