@@ -95,6 +95,7 @@ const generalLimiter = rateLimit({ windowMs: 15 * 60 * 1000, max: 100 });
 
 app.use('/api/auth', authLimiter, require('./routes/authRoutes'));
 app.use('/api/leads', generalLimiter, require('./routes/leadsRoutes'));
+app.use('/api/calendar', generalLimiter, require('./routes/calendarRoutes'));
 
 app.get('/', (req, res) => {
   res.json({ message: 'API SaaS Leads — Server running ✅' });
