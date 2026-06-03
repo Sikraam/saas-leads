@@ -1,18 +1,29 @@
 const { google } = require('googleapis');
+const path = require('path');
 
-const auth = new google.auth.GoogleAuth({
-  credentials: {
-    type: 'service_account',
-    project_id: 'helical-button-489911-p9',
-    private_key_id: process.env.GOOGLE_PRIVATE_KEY_ID,
-    private_key: process.env.GOOGLE_PRIVATE_KEY?.replace(/\\n/g, '\n'),
-    client_email: process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL,
-    client_id: '112054358788072645472',
-    universe_domain: 'googleapis.com'
-  },
-  scopes: ['https://www.googleapis.com/auth/calendar'],
-});
+// Try env variables first, fallback to file
+let authConfig;
+if (process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL && process.env.GOOGLE_PRIVATE_KEY) {
+  authConfig = {
+    credentials: {
+      type: 'service_account',
+      project_id: 'helical-button-489911-p9',
+      private_key_id: process.env.GOOGLE_PRIVATE_KEY_ID,
+      private_key: process.env.GOOGLE_PRIVATE_KEY?.replace(/\\n/g, '\n'),
+      client_email: process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL,
+      client_id: '112054358788072645472',
+      universe_domain: 'googleapis.com'
+    },
+    scopes: ['https://www.googleapis.com/auth/calendar'],
+  };
+} else {
+  authConfig = {
+    keyFile: path.join(__dirname, '..', 'google-service-account.json.json'),
+    scopes: ['https://www.googleapis.com/auth/calendar'],
+  };
+}
 
+const auth = new google.auth.GoogleAuth(authConfig);
 const calendar = google.calendar({ version: 'v3', auth });
 
 async function createCalendarEvent(leadName, phone, dateTime, notes = '') {
@@ -27,7 +38,7 @@ async function createCalendarEvent(leadName, phone, dateTime, notes = '') {
   };
 
   const response = await calendar.events.insert({
-    calendarId: process.env.GOOGLE_CALENDAR_ID || 'primary',
+    calendarId: process.env.GOOGLE_CALENDAR_ID || 'ikraamse7@gmail.com',
     resource: event,
   });
 
