@@ -37,6 +37,7 @@ app.use(cors({
   credentials: true
 }));
 
+app.use('/api/calendar', generalLimiter, require('./routes/calendarRoutes'));
 // WEBHOOK GET - Verification
 app.get('/api/webhook/facebook', (req, res) => {
   const mode = req.query['hub.mode'];
