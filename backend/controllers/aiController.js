@@ -13,12 +13,10 @@ function extractRDVInfo(text) {
   const rdvKeywords = ['rendez-vous', 'rdv', 'confirme', 'confirmé', 'd\'accord', 'ok pour', 'parfait pour', 'lundi', 'mardi', 'mercredi', 'jeudi', 'vendredi'];
   const timePattern = /(\d{1,2}h|\d{1,2}:\d{2})/i;
   const datePattern = /\b(lundi|mardi|mercredi|jeudi|vendredi|samedi|dimanche|\d{1,2}[\/\-]\d{1,2})/i;
-  
   const textLower = text.toLowerCase();
   const hasRDV = rdvKeywords.some(k => textLower.includes(k));
   const timeMatch = text.match(timePattern);
   const dateMatch = text.match(datePattern);
-  
   return { hasRDV, time: timeMatch?.[0], date: dateMatch?.[0] };
 }
 
@@ -27,7 +25,6 @@ function getNextDateForDay(dayName) {
   const today = new Date();
   const targetDay = days[dayName.toLowerCase()];
   if (targetDay === undefined) return null;
-  
   const daysUntil = (targetDay - today.getDay() + 7) % 7 || 7;
   const nextDate = new Date(today);
   nextDate.setDate(today.getDate() + daysUntil);
@@ -37,18 +34,15 @@ function getNextDateForDay(dayName) {
 function buildDateTime(date, time) {
   try {
     let baseDate = new Date();
-    
     if (date) {
       const dayDate = getNextDateForDay(date);
       if (dayDate) baseDate = dayDate;
     }
-    
     let hours = 10;
     if (time) {
       const match = time.match(/(\d{1,2})/);
       if (match) hours = parseInt(match[1]);
     }
-    
     baseDate.setHours(hours, 0, 0, 0);
     return baseDate.toISOString();
   } catch (e) {
@@ -63,7 +57,6 @@ async function handleWhatsAppReply(req, res) {
   try {
     const { Body, From } = req.body;
     const phone = From.replace('whatsapp:+212', '0').replace('whatsapp:+', '');
-    
     console.log('📱 Message recu de:', phone, '→', Body);
 
     const lead = await prisma.lead.findFirst({
@@ -120,20 +113,37 @@ Nom du lead: ${lead.name}`
       data: { conversationId: conv.id, role: 'assistant', content: aiResponse }
     });
 
-    // Detect RDV confirmation et créer Calendar event
+    // Detect RDV confirmation → Calendar + DB
     if (aiResponse.includes('RDV CONFIRMÉ:')) {
       try {
         const rdvInfo = extractRDVInfo(aiResponse);
         const dateTime = buildDateTime(rdvInfo.date, rdvInfo.time);
-        
+
         const event = await createCalendarEvent(
           lead.name,
           lead.phone,
           dateTime,
-          `Lead confirmé via WhatsApp AI`
+          'Lead confirmé via WhatsApp AI'
         );
-        
         console.log('📅 RDV créé dans Google Calendar:', event.htmlLink);
+
+        // Save f DB
+        await prisma.appointment.upsert({
+          where: { leadId: lead.id },
+          update: {
+            scheduledAt: new Date(dateTime),
+            googleEventId: event.id,
+            status: 'scheduled'
+          },
+          create: {
+            leadId: lead.id,
+            tenantId: lead.tenantId,
+            scheduledAt: new Date(dateTime),
+            googleEventId: event.id,
+            status: 'scheduled'
+          }
+        });
+        console.log('✅ Appointment saved in DB');
       } catch (calErr) {
         console.error('❌ Calendar error:', calErr.message);
       }
