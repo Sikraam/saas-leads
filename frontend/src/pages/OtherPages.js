@@ -3,7 +3,7 @@ import API from '../services/api';
 // ─────────────────────────────────────────────────────────────────────────────
 // ConversationsPage.jsx
 // ─────────────────────────────────────────────────────────────────────────────
-import { useState } from 'react';
+
 
 const MOCK_CONVS = [
   { id: 1, name: 'Ikraam Test', phone: '0612345678', status: 'active', lastMsg: 'Bonjour, je suis intéressé par vos services.', time: 'Il y a 2 min', unread: 2 },
