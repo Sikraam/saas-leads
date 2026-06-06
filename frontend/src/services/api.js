@@ -20,5 +20,7 @@ export const createLead = (data) => API.post('/leads', data);
 export const updateLeadStatus = (id, status) => API.patch(`/leads/${id}/status`, { status });
 export const getAppointments = () => API.get('/appointments');
 export const createAppointment = (data) => API.post('/appointments', data);
+export const getConversations = () => API.get('/conversations');
+export const getMessages = (convId) => API.get(`/conversations/${convId}/messages`);
 
 export default API;

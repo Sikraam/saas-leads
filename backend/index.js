@@ -94,6 +94,7 @@ app.use('/api/auth', authLimiter, require('./routes/authRoutes'));
 app.use('/api/leads', generalLimiter, require('./routes/leadsRoutes'));
 app.use('/api/calendar', generalLimiter, require('./routes/calendarRoutes'));
 app.use('/api/appointments', generalLimiter, require('./routes/appointmentsRoutes'));
+app.use('/api/conversations', generalLimiter, require('./routes/conversationsRoutes'));
 
 app.get('/', (req, res) => {
   res.json({ message: 'API SaaS Leads — Server running ✅' });
