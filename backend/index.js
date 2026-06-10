@@ -11,6 +11,7 @@ const twilio = require('twilio');
 const twilioClient = twilio(process.env.TWILIO_ACCOUNT_SID, process.env.TWILIO_AUTH_TOKEN);
 
 async function sendWhatsAppMessage(phone, name) {
+  console.log('📱 Trying to send WhatsApp to:', phone);
   try {
     await twilioClient.messages.create({
       from: process.env.TWILIO_WHATSAPP_FROM,
