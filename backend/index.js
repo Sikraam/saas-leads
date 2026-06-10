@@ -51,7 +51,7 @@ app.get('/api/webhook/facebook', (req, res) => {
 
 // WEBHOOK POST - Reception leads
 app.post('/api/webhook/facebook', async (req, res) => {
-  console.log('📩 Lead recu!', JSON.stringify(req.body));
+  console.log('📩 WEBHOOK RECEIVED!', JSON.stringify(req.body).slice(0, 100));
   try {
     const { object, entry } = req.body;
     if (object !== 'page') return res.sendStatus(200);
