@@ -67,7 +67,7 @@ app.post('/api/webhook/facebook', async (req, res) => {
             phone,
             source: 'facebook',
             status: 'new',
-            tenantId: '722c9d64-f244-4772-a70a-318f2f0018f3'
+            tenantId: '31049066-8582-4302-a127-c3e3b54aca09'
           }
         });
         console.log('✅ Lead cree:', name, phone);
