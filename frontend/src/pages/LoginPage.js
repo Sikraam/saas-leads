@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { login } from '../services/api';
+import { login, register } from '../services/api';
 
 export default function LoginPage({ onLogin }) {
   const [email, setEmail]       = useState('');
@@ -7,18 +7,26 @@ export default function LoginPage({ onLogin }) {
   const [error, setError]       = useState('');
   const [loading, setLoading]   = useState(false);
   const [showPwd, setShowPwd]   = useState(false);
+  const [isRegister, setIsRegister] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
     setError('');
     try {
-      const res = await login({ email, password });
-      localStorage.setItem('token', res.data.token);
-      localStorage.setItem('user', JSON.stringify(res.data.user));
-      onLogin(res.data.user);
+      if (isRegister) {
+        const res = await register({ email, password, name: email.split('@')[0] });
+        localStorage.setItem('token', res.data.token);
+        localStorage.setItem('user', JSON.stringify(res.data.user));
+        onLogin(res.data.user);
+      } else {
+        const res = await login({ email, password });
+        localStorage.setItem('token', res.data.token);
+        localStorage.setItem('user', JSON.stringify(res.data.user));
+        onLogin(res.data.user);
+      }
     } catch {
-      setError('Email ou mot de passe incorrect');
+      setError(isRegister ? "Erreur lors de l'inscription" : 'Email ou mot de passe incorrect');
     } finally {
       setLoading(false);
     }
@@ -30,13 +38,12 @@ export default function LoginPage({ onLogin }) {
       background: '#0d1117',
       fontFamily: "'DM Sans', system-ui, sans-serif",
     }}>
-      {/* ── LEFT PANEL ── */}
+      {/* LEFT PANEL */}
       <div style={{
         flex: 1, display: 'flex', flexDirection: 'column',
         justifyContent: 'center', padding: '60px 80px',
         position: 'relative', overflow: 'hidden',
       }}>
-        {/* background glow */}
         <div style={{
           position: 'absolute', top: -100, left: -100,
           width: 500, height: 500, borderRadius: '50%',
@@ -50,7 +57,6 @@ export default function LoginPage({ onLogin }) {
           pointerEvents: 'none',
         }} />
 
-        {/* Logo */}
         <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 64, position: 'relative' }}>
           <div style={{
             width: 42, height: 42,
@@ -65,7 +71,6 @@ export default function LoginPage({ onLogin }) {
           </div>
         </div>
 
-        {/* Headline */}
         <div style={{ position: 'relative' }}>
           <h1 style={{ fontSize: 44, fontWeight: 900, color: '#fff', lineHeight: 1.15, marginBottom: 20, letterSpacing: '-1px' }}>
             Automatisez vos leads<br />
@@ -80,7 +85,6 @@ export default function LoginPage({ onLogin }) {
             Capturez, qualifiez et convertissez vos leads automatiquement grâce à l'intelligence artificielle.
           </p>
 
-          {/* Feature pills */}
           <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
             {[
               { icon: '⚡', title: 'Réponse en moins de 60s',  desc: 'Agent IA contacte chaque lead instantanément' },
@@ -105,7 +109,7 @@ export default function LoginPage({ onLogin }) {
         </div>
       </div>
 
-      {/* ── RIGHT PANEL ── */}
+      {/* RIGHT PANEL */}
       <div style={{
         width: 480, display: 'flex', alignItems: 'center',
         justifyContent: 'center', padding: '40px 48px',
@@ -113,17 +117,16 @@ export default function LoginPage({ onLogin }) {
         borderLeft: '1px solid rgba(255,255,255,0.06)',
       }}>
         <div style={{ width: '100%' }}>
-          {/* Card */}
           <div style={{
             background: '#fff', borderRadius: 24, padding: '40px 36px',
             boxShadow: '0 30px 80px rgba(0,0,0,0.5)',
           }}>
             <div style={{ marginBottom: 28 }}>
               <h2 style={{ fontSize: 22, fontWeight: 800, color: '#0f172a', letterSpacing: '-0.4px' }}>
-                Connexion
+                {isRegister ? 'Créer un compte' : 'Connexion'}
               </h2>
               <p style={{ fontSize: 13, color: '#94a3b8', marginTop: 4 }}>
-                Accédez à votre tableau de bord
+                {isRegister ? 'Rejoignez LeadFlow' : 'Accédez à votre tableau de bord'}
               </p>
             </div>
 
@@ -141,7 +144,6 @@ export default function LoginPage({ onLogin }) {
             )}
 
             <form onSubmit={handleSubmit}>
-              {/* Email */}
               <div style={{ marginBottom: 16 }}>
                 <label style={{ fontSize: 12, fontWeight: 600, color: '#374151', display: 'block', marginBottom: 6, textTransform: 'uppercase', letterSpacing: '0.5px' }}>
                   Email
@@ -162,7 +164,6 @@ export default function LoginPage({ onLogin }) {
                 />
               </div>
 
-              {/* Password */}
               <div style={{ marginBottom: 28 }}>
                 <label style={{ fontSize: 12, fontWeight: 600, color: '#374151', display: 'block', marginBottom: 6, textTransform: 'uppercase', letterSpacing: '0.5px' }}>
                   Mot de passe
@@ -206,24 +207,23 @@ export default function LoginPage({ onLogin }) {
                 onMouseEnter={e => { if (!loading) e.target.style.transform = 'translateY(-1px)'; }}
                 onMouseLeave={e => { e.target.style.transform = 'none'; }}
               >
-                {loading ? (
-                  <span style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8 }}>
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" style={{ animation: 'spin 1s linear infinite' }}>
-                      <path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83" />
-                    </svg>
-                    Connexion…
-                  </span>
-                ) : 'Se connecter →'}
+                {loading ? '...' : isRegister ? 'Créer mon compte →' : 'Se connecter →'}
               </button>
             </form>
 
             <div style={{ textAlign: 'center', marginTop: 20 }}>
-              <span style={{ fontSize: 12, color: '#94a3b8' }}>Pas encore de compte ? </span>
-              <span style={{ fontSize: 12, color: '#6366f1', cursor: 'pointer', fontWeight: 600 }}>Contactez-nous</span>
+              <span style={{ fontSize: 12, color: '#94a3b8' }}>
+                {isRegister ? 'Déjà un compte ? ' : 'Pas encore de compte ? '}
+              </span>
+              <span
+                onClick={() => { setIsRegister(!isRegister); setError(''); }}
+                style={{ fontSize: 12, color: '#6366f1', cursor: 'pointer', fontWeight: 600 }}
+              >
+                {isRegister ? 'Se connecter' : "S'inscrire"}
+              </span>
             </div>
           </div>
 
-          {/* Trust badge */}
           <div style={{ display: 'flex', justifyContent: 'center', gap: 24, marginTop: 24 }}>
             {['🔒 Sécurisé SSL', '🇲🇦 Maroc & MENA', '⚡ 99.9% uptime'].map(t => (
               <span key={t} style={{ fontSize: 11, color: '#374151' }}>{t}</span>
