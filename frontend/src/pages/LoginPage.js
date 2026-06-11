@@ -1,13 +1,22 @@
 import { useState } from 'react';
 import { login, register } from '../services/api';
 
+function Logo({ size = 48 }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 48 48" fill="none">
+      <rect width="48" height="48" rx="14" fill="#3b82f6" />
+      <path d="M24 8L34 21H29V34H19V21H14Z" fill="white" />
+    </svg>
+  );
+}
+
 export default function LoginPage({ onLogin }) {
-  const [email, setEmail]       = useState('');
-  const [password, setPassword] = useState('');
-  const [name, setName]         = useState('');
-  const [error, setError]       = useState('');
-  const [loading, setLoading]   = useState(false);
-  const [showPwd, setShowPwd]   = useState(false);
+  const [email, setEmail]           = useState('');
+  const [password, setPassword]     = useState('');
+  const [name, setName]             = useState('');
+  const [error, setError]           = useState('');
+  const [loading, setLoading]       = useState(false);
+  const [showPwd, setShowPwd]       = useState(false);
   const [isRegister, setIsRegister] = useState(false);
 
   const handleSubmit = async (e) => {
@@ -40,221 +49,148 @@ export default function LoginPage({ onLogin }) {
     color: '#0f172a', background: '#f8fafc', transition: 'all 0.2s',
   };
 
+  const features = [
+    { label: 'Reponse en moins de 60s',   desc: "L'agent IA contacte chaque lead instantanement",   iconPath: 'M13 10V3L4 14h7v7l9-11h-7z' },
+    { label: 'Qualification automatique', desc: 'GPT-4o qualifie et prend les rendez-vous',           iconPath: 'M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17H3a2 2 0 01-2-2V5a2 2 0 012-2h16a2 2 0 012 2v10a2 2 0 01-2 2h-2' },
+    { label: 'Sync Google Calendar',      desc: 'RDV automatiquement crees dans votre agenda',        iconPath: 'M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z' },
+    { label: 'Dashboard en temps reel',   desc: 'Suivez vos leads et conversions live',               iconPath: 'M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z' },
+  ];
+
   return (
-    <div style={{
-      minHeight: '100vh', display: 'flex',
-      background: '#0d1117',
-      fontFamily: "'DM Sans', system-ui, sans-serif",
-    }}>
-      {/* LEFT PANEL */}
-      <div style={{
-        flex: 1, display: 'flex', flexDirection: 'column',
-        justifyContent: 'center', padding: '60px 80px',
-        position: 'relative', overflow: 'hidden',
-      }}>
-        <div style={{
-          position: 'absolute', top: -100, left: -100,
-          width: 600, height: 600, borderRadius: '50%',
-          background: 'radial-gradient(circle, rgba(99,102,241,0.15) 0%, transparent 70%)',
-          pointerEvents: 'none',
-        }} />
-        <div style={{
-          position: 'absolute', bottom: -80, right: -80,
-          width: 400, height: 400, borderRadius: '50%',
-          background: 'radial-gradient(circle, rgba(139,92,246,0.1) 0%, transparent 70%)',
-          pointerEvents: 'none',
-        }} />
+    <div style={{ minHeight: '100vh', display: 'flex', background: '#0f172a', fontFamily: "'Inter', system-ui, sans-serif" }}>
+
+      {/* LEFT */}
+      <div style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center', padding: '60px 72px', position: 'relative', overflow: 'hidden', background: 'linear-gradient(135deg, #0f172a 0%, #1e293b 100%)' }}>
+        <div style={{ position: 'absolute', top: -100, left: -100, width: 500, height: 500, borderRadius: '50%', background: 'radial-gradient(circle, rgba(59,130,246,0.15) 0%, transparent 70%)', pointerEvents: 'none' }} />
 
         {/* Logo */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 64, position: 'relative' }}>
-          <div style={{
-            width: 46, height: 46,
-            background: 'linear-gradient(135deg,#6366f1,#8b5cf6)',
-            borderRadius: 14, display: 'flex', alignItems: 'center',
-            justifyContent: 'center', fontSize: 22,
-            boxShadow: '0 0 24px rgba(99,102,241,0.5)',
-          }}>⚡</div>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 14, marginBottom: 56 }}>
+          <Logo size={44} />
           <div>
-            <div style={{ fontSize: 20, fontWeight: 800, color: '#fff', letterSpacing: '-0.3px' }}>LeadFlow</div>
-            <div style={{ fontSize: 11, color: '#4b5563', marginTop: 1 }}>AI Automation Platform</div>
+            <div style={{ fontSize: 20, fontWeight: 700, color: '#fff', letterSpacing: '-0.3px' }}>LeadFlow</div>
+            <div style={{ fontSize: 11, color: '#475569', marginTop: 2 }}>AI Automation Platform</div>
           </div>
         </div>
 
-        {/* Headline */}
-        <h1 style={{ fontSize: 48, fontWeight: 900, color: '#fff', lineHeight: 1.15, marginBottom: 20, letterSpacing: '-1px' }}>
+        <h1 style={{ fontSize: 44, fontWeight: 800, color: '#fff', lineHeight: 1.18, marginBottom: 16, letterSpacing: '-1px' }}>
           Automatisez vos leads<br />
-          <span style={{
-            background: 'linear-gradient(90deg,#818cf8,#c084fc)',
-            WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent',
-          }}>
-            WhatsApp & Facebook
-          </span>
+          <span style={{ color: '#60a5fa' }}>WhatsApp & Facebook</span>
         </h1>
-        <p style={{ fontSize: 16, color: '#4b5563', lineHeight: 1.7, maxWidth: 440, marginBottom: 56 }}>
-          Capturez, qualifiez et convertissez vos leads automatiquement grâce à l'intelligence artificielle.
+        <p style={{ fontSize: 15, color: '#475569', lineHeight: 1.65, maxWidth: 420, marginBottom: 48 }}>
+          Capturez, qualifiez et convertissez vos leads automatiquement grace a l'intelligence artificielle.
         </p>
 
         {/* Features */}
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 18 }}>
-          {[
-            { icon: '⚡', title: 'Réponse en moins de 60s', desc: 'Agent IA contacte chaque lead instantanément' },
-            { icon: '🤖', title: 'Qualification automatique', desc: 'GPT-4o qualifie et prend les rendez-vous' },
-            { icon: '📅', title: 'Sync Google Calendar', desc: 'RDV automatiquement créés dans votre agenda' },
-            { icon: '📊', title: 'Dashboard en temps réel', desc: 'Suivez vos leads et conversions live' },
-          ].map(f => (
-            <div key={f.title} style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
-              <div style={{
-                width: 44, height: 44, borderRadius: 12,
-                background: 'rgba(99,102,241,0.12)',
-                border: '1px solid rgba(99,102,241,0.2)',
-                display: 'flex', alignItems: 'center', justifyContent: 'center',
-                fontSize: 20, flexShrink: 0,
-              }}>{f.icon}</div>
-              <div>
-                <div style={{ fontSize: 14, fontWeight: 600, color: '#e2e8f0' }}>{f.title}</div>
-                <div style={{ fontSize: 12, color: '#4b5563', marginTop: 2 }}>{f.desc}</div>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
+          {features.map(f => (
+            <div key={f.label} style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
+              <div style={{ width: 42, height: 42, borderRadius: 11, flexShrink: 0, background: 'rgba(59,130,246,0.12)', border: '1px solid rgba(59,130,246,0.2)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#60a5fa" strokeWidth="1.8">
+                  <path d={f.iconPath} strokeLinecap="round" strokeLinejoin="round" />
+                </svg>
               </div>
+              <div>
+                <div style={{ fontSize: 13, fontWeight: 600, color: '#e2e8f0' }}>{f.label}</div>
+                <div style={{ fontSize: 12, color: '#475569', marginTop: 2 }}>{f.desc}</div>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        <div style={{ display: 'flex', gap: 24, marginTop: 48 }}>
+          {['SSL securise', 'Maroc & MENA', '99.9% uptime'].map(t => (
+            <div key={t} style={{ display: 'flex', alignItems: 'center', gap: 5 }}>
+              <div style={{ width: 5, height: 5, borderRadius: '50%', background: '#3b82f6' }} />
+              <span style={{ fontSize: 11, color: '#475569' }}>{t}</span>
             </div>
           ))}
         </div>
       </div>
 
-      {/* RIGHT PANEL */}
-      <div style={{
-        width: 520, display: 'flex', alignItems: 'center',
-        justifyContent: 'center', padding: '40px 52px',
-        background: 'rgba(255,255,255,0.02)',
-        borderLeft: '1px solid rgba(255,255,255,0.06)',
-      }}>
+      {/* RIGHT */}
+      <div style={{ width: 500, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '40px 48px', borderLeft: '1px solid rgba(255,255,255,0.06)' }}>
         <div style={{ width: '100%' }}>
-          <div style={{
-            background: '#fff', borderRadius: 28, padding: '44px 40px',
-            boxShadow: '0 30px 80px rgba(0,0,0,0.5)',
-          }}>
-            {/* Header */}
-            <div style={{ marginBottom: 32 }}>
-              <div style={{
-                width: 48, height: 48, borderRadius: 14,
-                background: 'linear-gradient(135deg,#6366f1,#8b5cf6)',
-                display: 'flex', alignItems: 'center', justifyContent: 'center',
-                fontSize: 22, marginBottom: 16,
-                boxShadow: '0 4px 12px rgba(99,102,241,0.3)',
-              }}>⚡</div>
-              <h2 style={{ fontSize: 24, fontWeight: 800, color: '#0f172a', letterSpacing: '-0.4px' }}>
-                {isRegister ? 'Créer un compte' : 'Bon retour !'}
+          <div style={{ background: '#fff', borderRadius: 20, padding: '40px 36px', boxShadow: '0 24px 64px rgba(0,0,0,0.4)' }}>
+            <div style={{ marginBottom: 28 }}>
+              <Logo size={40} />
+              <h2 style={{ fontSize: 22, fontWeight: 700, color: '#0f172a', letterSpacing: '-0.4px', marginTop: 14, marginBottom: 4 }}>
+                {isRegister ? 'Creer un compte' : 'Bon retour !'}
               </h2>
-              <p style={{ fontSize: 13, color: '#94a3b8', marginTop: 6 }}>
-                {isRegister ? 'Rejoignez LeadFlow et automatisez vos leads' : 'Connectez-vous à votre espace LeadFlow'}
+              <p style={{ fontSize: 13, color: '#94a3b8' }}>
+                {isRegister ? 'Rejoignez LeadFlow et automatisez vos leads' : 'Connectez-vous a votre espace LeadFlow'}
               </p>
             </div>
 
             {error && (
-              <div style={{
-                background: '#fef2f2', color: '#dc2626', padding: '12px 16px',
-                borderRadius: 12, fontSize: 13, marginBottom: 24,
-                border: '1px solid #fecaca', display: 'flex', alignItems: 'center', gap: 8,
-              }}>
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                  <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>
+              <div style={{ background: '#fef2f2', color: '#b91c1c', padding: '10px 14px', borderRadius: 9, fontSize: 13, marginBottom: 20, border: '1px solid #fecaca', display: 'flex', alignItems: 'center', gap: 7 }}>
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                  <circle cx="12" cy="12" r="10" /><line x1="12" y1="8" x2="12" y2="12" /><line x1="12" y1="16" x2="12.01" y2="16" />
                 </svg>
                 {error}
               </div>
             )}
 
-            <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+            <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
               {isRegister && (
                 <div>
-                  <label style={{ fontSize: 12, fontWeight: 600, color: '#374151', display: 'block', marginBottom: 7, textTransform: 'uppercase', letterSpacing: '0.5px' }}>
-                    Nom complet
-                  </label>
-                  <input
-                    type="text" value={name} required={isRegister}
-                    onChange={e => setName(e.target.value)}
-                    placeholder="Votre nom complet"
+                  <label style={{ fontSize: 11, fontWeight: 600, color: '#374151', display: 'block', marginBottom: 6, textTransform: 'uppercase', letterSpacing: '0.4px' }}>Nom complet</label>
+                  <input type="text" value={name} required={isRegister} onChange={e => setName(e.target.value)} placeholder="Votre nom"
                     style={inputStyle}
-                    onFocus={e => { e.target.style.borderColor = '#6366f1'; e.target.style.background = '#fff'; e.target.style.boxShadow = '0 0 0 3px rgba(99,102,241,0.1)'; }}
-                    onBlur={e => { e.target.style.borderColor = '#e2e8f0'; e.target.style.background = '#f8fafc'; e.target.style.boxShadow = 'none'; }}
+                    onFocus={e => { e.target.style.borderColor = '#3b82f6'; e.target.style.background = '#fff'; }}
+                    onBlur={e => { e.target.style.borderColor = '#e2e8f0'; e.target.style.background = '#f8fafc'; }}
                   />
                 </div>
               )}
-
               <div>
-                <label style={{ fontSize: 12, fontWeight: 600, color: '#374151', display: 'block', marginBottom: 7, textTransform: 'uppercase', letterSpacing: '0.5px' }}>
-                  Email
-                </label>
-                <input
-                  type="email" value={email} required
-                  onChange={e => setEmail(e.target.value)}
-                  placeholder="vous@exemple.com"
+                <label style={{ fontSize: 11, fontWeight: 600, color: '#374151', display: 'block', marginBottom: 6, textTransform: 'uppercase', letterSpacing: '0.4px' }}>Email</label>
+                <input type="email" value={email} required onChange={e => setEmail(e.target.value)} placeholder="vous@exemple.com"
                   style={inputStyle}
-                  onFocus={e => { e.target.style.borderColor = '#6366f1'; e.target.style.background = '#fff'; e.target.style.boxShadow = '0 0 0 3px rgba(99,102,241,0.1)'; }}
-                  onBlur={e => { e.target.style.borderColor = '#e2e8f0'; e.target.style.background = '#f8fafc'; e.target.style.boxShadow = 'none'; }}
+                  onFocus={e => { e.target.style.borderColor = '#3b82f6'; e.target.style.background = '#fff'; }}
+                  onBlur={e => { e.target.style.borderColor = '#e2e8f0'; e.target.style.background = '#f8fafc'; }}
                 />
               </div>
-
               <div>
-                <label style={{ fontSize: 12, fontWeight: 600, color: '#374151', display: 'block', marginBottom: 7, textTransform: 'uppercase', letterSpacing: '0.5px' }}>
-                  Mot de passe
-                </label>
+                <label style={{ fontSize: 11, fontWeight: 600, color: '#374151', display: 'block', marginBottom: 6, textTransform: 'uppercase', letterSpacing: '0.4px' }}>Mot de passe</label>
                 <div style={{ position: 'relative' }}>
-                  <input
-                    type={showPwd ? 'text' : 'password'} value={password} required
-                    onChange={e => setPassword(e.target.value)}
-                    placeholder="••••••••"
-                    style={{ ...inputStyle, paddingRight: 44 }}
-                    onFocus={e => { e.target.style.borderColor = '#6366f1'; e.target.style.background = '#fff'; e.target.style.boxShadow = '0 0 0 3px rgba(99,102,241,0.1)'; }}
-                    onBlur={e => { e.target.style.borderColor = '#e2e8f0'; e.target.style.background = '#f8fafc'; e.target.style.boxShadow = 'none'; }}
+                  <input type={showPwd ? 'text' : 'password'} value={password} required onChange={e => setPassword(e.target.value)} placeholder="••••••••"
+                    style={{ ...inputStyle, paddingRight: 42 }}
+                    onFocus={e => { e.target.style.borderColor = '#3b82f6'; e.target.style.background = '#fff'; }}
+                    onBlur={e => { e.target.style.borderColor = '#e2e8f0'; e.target.style.background = '#f8fafc'; }}
                   />
-                  <button type="button" onClick={() => setShowPwd(!showPwd)} style={{
-                    position: 'absolute', right: 14, top: '50%', transform: 'translateY(-50%)',
-                    background: 'none', border: 'none', cursor: 'pointer', color: '#94a3b8', padding: 0,
-                    display: 'flex', alignItems: 'center',
-                  }}>
+                  <button type="button" onClick={() => setShowPwd(!showPwd)} style={{ position: 'absolute', right: 13, top: '50%', transform: 'translateY(-50%)', background: 'none', border: 'none', cursor: 'pointer', color: '#94a3b8', padding: 0, display: 'flex' }}>
                     {showPwd
-                      ? <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M17.94 17.94A10.07 10.07 0 0112 20c-7 0-11-8-11-8a18.45 18.45 0 015.06-5.94M9.9 4.24A9.12 9.12 0 0112 4c7 0 11 8 11 8a18.5 18.5 0 01-2.16 3.19m-6.72-1.07a3 3 0 11-4.24-4.24M1 1l22 22"/></svg>
-                      : <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                      ? <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M17.94 17.94A10.07 10.07 0 0112 20c-7 0-11-8-11-8a18.45 18.45 0 015.06-5.94M9.9 4.24A9.12 9.12 0 0112 4c7 0 11 8 11 8a18.5 18.5 0 01-2.16 3.19m-6.72-1.07a3 3 0 11-4.24-4.24M1 1l22 22" /></svg>
+                      : <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" /><circle cx="12" cy="12" r="3" /></svg>
                     }
                   </button>
                 </div>
               </div>
 
               <button type="submit" disabled={loading} style={{
-                width: '100%', padding: '14px',
-                background: loading ? '#a5b4fc' : 'linear-gradient(135deg,#6366f1,#8b5cf6)',
-                color: '#fff', border: 'none', borderRadius: 14,
-                fontSize: 15, fontWeight: 700, cursor: loading ? 'not-allowed' : 'pointer',
-                transition: 'all 0.2s', marginTop: 8,
-                boxShadow: loading ? 'none' : '0 4px 20px rgba(99,102,241,0.4)',
+                width: '100%', padding: '12px', background: loading ? '#93c5fd' : '#3b82f6',
+                color: '#fff', border: 'none', borderRadius: 10,
+                fontSize: 14, fontWeight: 600, cursor: loading ? 'not-allowed' : 'pointer',
+                transition: 'background 0.15s', marginTop: 4,
               }}
-                onMouseEnter={e => { if (!loading) { e.target.style.transform = 'translateY(-1px)'; e.target.style.boxShadow = '0 6px 24px rgba(99,102,241,0.5)'; }}}
-                onMouseLeave={e => { e.target.style.transform = 'none'; e.target.style.boxShadow = '0 4px 20px rgba(99,102,241,0.4)'; }}
+                onMouseEnter={e => { if (!loading) e.target.style.background = '#2563eb'; }}
+                onMouseLeave={e => { if (!loading) e.target.style.background = '#3b82f6'; }}
               >
-                {loading ? '...' : isRegister ? 'Créer mon compte →' : 'Se connecter →'}
+                {loading ? '...' : isRegister ? 'Creer mon compte' : 'Se connecter'}
               </button>
             </form>
 
-            <div style={{ textAlign: 'center', marginTop: 24, paddingTop: 24, borderTop: '1px solid #f1f5f9' }}>
+            <div style={{ textAlign: 'center', marginTop: 20, paddingTop: 20, borderTop: '1px solid #f1f5f9' }}>
               <span style={{ fontSize: 13, color: '#94a3b8' }}>
-                {isRegister ? 'Déjà un compte ? ' : 'Pas encore de compte ? '}
+                {isRegister ? 'Deja un compte ? ' : 'Pas encore de compte ? '}
               </span>
-              <span
-                onClick={() => { setIsRegister(!isRegister); setError(''); }}
-                style={{ fontSize: 13, color: '#6366f1', cursor: 'pointer', fontWeight: 700 }}
-              >
+              <span onClick={() => { setIsRegister(!isRegister); setError(''); }}
+                style={{ fontSize: 13, color: '#3b82f6', cursor: 'pointer', fontWeight: 600 }}>
                 {isRegister ? 'Se connecter' : "S'inscrire"}
               </span>
             </div>
           </div>
-
-          <div style={{ display: 'flex', justifyContent: 'center', gap: 24, marginTop: 24 }}>
-            {['🔒 Sécurisé SSL', '🇲🇦 Maroc & MENA', '⚡ 99.9% uptime'].map(t => (
-              <span key={t} style={{ fontSize: 11, color: '#374151' }}>{t}</span>
-            ))}
-          </div>
         </div>
       </div>
-
-      <style>{`@keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }`}</style>
     </div>
   );
 }
